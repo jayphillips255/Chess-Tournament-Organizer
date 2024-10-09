@@ -1,0 +1,16 @@
+{
+  "webProject": {
+    "projectFile": "./Organizer.Web/Organizer.Web.csproj"
+  },
+  "dataProject": {
+    "projectFile": "./Organizer.Data/Organizer.Data.csproj"
+  },
+
+  "rootGenerator": "Vue",
+
+  "generatorConfig": {
+    "Scripts": {
+      "targetDirectory": "../src"
+    }
+  }
+}
