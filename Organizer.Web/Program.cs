@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc;
 using Organizer.Data.Services;
-using static Organizer.Data.DatabaseSeeder;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -152,7 +151,7 @@ using (var scope = app.Services.CreateScope())
     using var db = serviceScope.GetRequiredService<AppDbContext>();
     db.Database.SetCommandTimeout(TimeSpan.FromMinutes(10));
     db.Database.Migrate();
-    await DatabaseSeeder.Seed(db);
+    DatabaseSeeder.Seed(db);
 }
 
 app.Run();

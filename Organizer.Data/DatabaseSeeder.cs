@@ -2,16 +2,16 @@
 
 namespace Organizer.Data;
 
-public static class DatabaseSeeder
+public class DatabaseSeeder
 {
-    public static async Task Seed(AppDbContext db)
+    public static void Seed(AppDbContext db)
     {
         if (!db.Tournaments.Any())
         {
             DateTime t1date = new(2024, 12, 5, 14, 0, 0);
             Tournament tournament1 = new() { Name = "Tournament #1", Type = Models.Type.Swiss, DateTime = t1date };
             db.Tournaments.Add(tournament1);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
 
             IEnumerable<Player> players = [
                 new Player { FirstName = "John", LastName = "Smith", Rating = "1200"},
@@ -29,7 +29,7 @@ public static class DatabaseSeeder
                 tournament1.Players.Add(player);
             }
 
-            await db.SaveChangesAsync();
+            db.SaveChanges();
         }
     }      
 }
