@@ -72,7 +72,6 @@ const coalesceVuetify = createCoalesceVuetify({
   metadata: $metadata,
 });
 
-
 const app = createApp(App);
 Object.defineProperties(
   app.config.globalProperties,

@@ -59,8 +59,7 @@
 import $metadata from "@/metadata.g";
 import { Domain, ModelType } from "coalesce-vue";
 
-const excludedTypes: Array<keyof typeof $metadata.types> = [
-];
+const excludedTypes: Array<keyof typeof $metadata.types> = [];
 
 const adminTypes = Object.values(($metadata as Domain).types).filter(
   //@ts-ignore may be errors if the project has only model or only object types

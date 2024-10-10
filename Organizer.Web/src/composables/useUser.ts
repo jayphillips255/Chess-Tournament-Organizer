@@ -1,6 +1,4 @@
-import {
-  userInfo,
-} from "@/user-service";
+import { userInfo } from "@/user-service";
 
 export function useUser() {
   return {

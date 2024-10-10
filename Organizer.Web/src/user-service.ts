@@ -1,18 +1,13 @@
 import { SecurityServiceViewModel } from "@/viewmodels.g";
-import {
-  UserInfo,
-} from "@/models.g";
+import { UserInfo } from "@/models.g";
 
 const securityService = new SecurityServiceViewModel();
 securityService.whoAmI.setConcurrency("debounce");
-
-
 
 /** Properties about the currently authenticated user */
 export const userInfo = computed(() => {
   return securityService.whoAmI.result ?? new UserInfo();
 });
-
 
 export const refreshUserInfo = () => securityService.whoAmI();
 
