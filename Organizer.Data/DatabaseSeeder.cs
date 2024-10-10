@@ -1,8 +1,7 @@
 ﻿using Organizer.Data.Models;
 
 namespace Organizer.Data;
-
-public class DatabaseSeeder()
+public class DatabaseSeeder
 {
     public static void Seed(AppDbContext db)
     {
@@ -13,7 +12,8 @@ public class DatabaseSeeder()
             db.Tournaments.Add(tournament1);
             db.SaveChanges();
 
-            IEnumerable<Player> players = [
+            IEnumerable<Player> players =
+            [
                 new Player { FirstName = "John", LastName = "Smith", Rating = "1200"},
                 new Player { FirstName = "Sarah", LastName = "Johnson", Rating = "1350"},
                 new Player { FirstName = "Michael", LastName = "Brown", Rating = "1500"},
@@ -31,5 +31,5 @@ public class DatabaseSeeder()
 
             db.SaveChanges();
         }
-    }      
+    }
 }
