@@ -31,6 +31,9 @@ jobs:
         with:
           lfs: true
 
+      - name: Azure Login
+        uses: Azure/login@v2.2.0
+
       - name: Use .NET SDK
         uses: actions/setup-dotnet@v4
         with:
