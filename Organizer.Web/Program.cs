@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc;
 using Organizer.Data.Services;
 
+
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
     Args = args,

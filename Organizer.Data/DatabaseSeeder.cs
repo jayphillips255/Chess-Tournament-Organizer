@@ -2,7 +2,7 @@
 
 namespace Organizer.Data;
 
-public class DatabaseSeeder
+public class DatabaseSeeder()
 {
     public static void Seed(AppDbContext db)
     {
