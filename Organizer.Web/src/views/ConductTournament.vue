@@ -68,8 +68,12 @@
               >
                 <td style="width: 50px; text-align: center">
                   <span v-if="index === 0" style="font-size: 24px">🥇</span>
-                  <span v-else-if="index === 1" style="font-size: 24px">🥈</span>
-                  <span v-else-if="index === 2" style="font-size: 24px">🥉</span>
+                  <span v-else-if="index === 1" style="font-size: 24px"
+                    >🥈</span
+                  >
+                  <span v-else-if="index === 2" style="font-size: 24px"
+                    >🥉</span
+                  >
                 </td>
                 <td>{{ player.firstName + " " + player.lastName }}</td>
                 <td>{{ player.score }}</td>
@@ -175,7 +179,9 @@ function addPlayer() {
   if (isNaN(Number(player.rating)) || Number(player.rating) < 0) {
     errors.value.rating = "Rating must be valid or empty";
   }
-  if (!(errors.value.firstName || errors.value.lastName || errors.value.rating)) {
+  if (
+    !(errors.value.firstName || errors.value.lastName || errors.value.rating)
+  ) {
     tournament.addToPlayers(player);
     tournament.$bulkSave();
     addedSucessfully = true;
@@ -186,7 +192,9 @@ function addPlayer() {
 }
 
 async function autoPair() {
-  playerPairs.value = await tournamentService.getPlayerPairs(tournament.tournamentId);
+  playerPairs.value = await tournamentService.getPlayerPairs(
+    tournament.tournamentId,
+  );
 }
 
 async function completeRound() {
