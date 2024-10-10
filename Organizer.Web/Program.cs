@@ -152,7 +152,7 @@ using (var scope = app.Services.CreateScope())
     using var db = serviceScope.GetRequiredService<AppDbContext>();
     db.Database.SetCommandTimeout(TimeSpan.FromMinutes(10));
     db.Database.Migrate();
-    DatabaseSeeder.Seed(db);
+    ActivatorUtilities.GetServiceOrCreateInstance<DatabaseSeeder>(serviceScope).Seed();
 }
 
 app.Run();
