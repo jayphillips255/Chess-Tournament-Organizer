@@ -2,7 +2,7 @@
 
 namespace Organizer.Data;
 
-public static class Seeder
+public static class DatabaseSeeder
 {
     public static async Task Seed(AppDbContext db)
     {

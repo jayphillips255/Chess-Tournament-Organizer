@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc;
 using Organizer.Data.Services;
+using static Organizer.Data.DatabaseSeeder;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -87,21 +88,21 @@ if (app.Environment.IsDevelopment())
 
     app.MapCoalesceSecurityOverview("coalesce-security");
 
-	// TODO: Dummy authentication for initial development.
-	// Replace this with a proper authentication scheme like
-	// Windows Authentication, or an OIDC provider, or something else.
-	// If you wanted to use ASP.NET Core Identity, you're recommended
-	// to keep the "--Identity" parameter to the Coalesce template enabled.
-	app.Use(async (context, next) =>
-	{
-		Claim[] claims = [new Claim(ClaimTypes.Name, "developmentuser")];
+    // TODO: Dummy authentication for initial development.
+    // Replace this with a proper authentication scheme like
+    // Windows Authentication, or an OIDC provider, or something else.
+    // If you wanted to use ASP.NET Core Identity, you're recommended
+    // to keep the "--Identity" parameter to the Coalesce template enabled.
+    app.Use(async (context, next) =>
+    {
+        Claim[] claims = [new Claim(ClaimTypes.Name, "developmentuser")];
 
-		var identity = new ClaimsIdentity(claims, "dummy-auth");
-		context.User = new ClaimsPrincipal(identity);
+        var identity = new ClaimsIdentity(claims, "dummy-auth");
+        context.User = new ClaimsPrincipal(identity);
 
-		await next.Invoke();
-	});
-	// End Dummy Authentication.
+        await next.Invoke();
+    });
+    // End Dummy Authentication.
 }
 
 app.UseAuthentication();
@@ -150,8 +151,8 @@ using (var scope = app.Services.CreateScope())
     // Run database migrations.
     using var db = serviceScope.GetRequiredService<AppDbContext>();
     db.Database.SetCommandTimeout(TimeSpan.FromMinutes(10));
-	db.Database.Migrate();
-    await Seeder.Seed(db);
+    db.Database.Migrate();
+    await DatabaseSeeder.Seed(db);
 }
 
 app.Run();
