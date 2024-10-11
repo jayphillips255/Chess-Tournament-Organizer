@@ -161,7 +161,8 @@ const allOutcomesSelected = computed(() => {
   if (playerPairs.value.length === 0) {
     return false;
   }
-  return playerPairs.value.every(
+  const validPairs = playerPairs.value.filter((pair) => pair.white !== null);
+  return validPairs.every(
     (pair) => pair.outcome !== null && pair.outcome !== undefined,
   );
 });
