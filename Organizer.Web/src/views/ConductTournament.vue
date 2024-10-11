@@ -5,25 +5,24 @@
       <v-col style="width: 50%">
         <v-card>
           <h2 class="my-2 mx-2">Add Player</h2>
-          <c-input
-            :model="player"
-            ref="firstName"
-            label="First Name"
+          <v-text-field
+            v-model="player.firstName"
             for="firstName"
             class="mt-2 mx-2"
-          ></c-input>
-          <c-input
-            :model="player"
-            label="Last Name"
+            label="First Name"
+          ></v-text-field>
+          <v-text-field
+            v-model="player.lastName"
             for="lastName"
             class="mx-2"
-          ></c-input>
-          <c-input
-            :model="player"
-            label="Rating"
+            label="Last Name"
+          ></v-text-field>
+          <v-text-field
+            v-model="player.rating"
             for="rating"
             class="mx-2"
-          ></c-input>
+            label="Rating"
+          ></v-text-field>
           <div>
             <v-btn
               @click="addPlayer()"
@@ -153,7 +152,7 @@ const errors = ref({
   lastName: "",
   rating: "",
 });
-var addedSucessfully = false;
+const addedSucessfully = ref(false);
 tournament.$load(itemId);
 tournament.$useAutoSave({ deep: true });
 
@@ -185,10 +184,18 @@ function addPlayer() {
   ) {
     tournament.addToPlayers(player);
     tournament.$bulkSave();
-    addedSucessfully = true;
     player.firstName = player.lastName = player.rating = "";
+    addedSucessfully.value = true;
+    setTimeout(() => {
+      addedSucessfully.value = false;
+    }, 5000);
   } else {
-    addedSucessfully = false;
+    addedSucessfully.value = false;
+    setTimeout(() => {
+      errors.value.firstName = "";
+      errors.value.lastName = "";
+      errors.value.rating = "";
+    }, 5000);
   }
 }
 
