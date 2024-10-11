@@ -1,30 +1,29 @@
 <template>
   <v-container style="width: 50%; float: left" class="ml-4">
-    <h1>Create a New Tournament</h1>
+    <h1>Create New Tournament</h1>
     <v-col>
       <v-form ref="form">
-        <c-input
-          :model="tournament"
-          id="tname"
+        <v-text-field
+          v-model="tournament.name"
           for="name"
           class="mt-2"
           label="Tournament Name"
-          clearable
-        ></c-input>
-        <c-input
-          :model="tournament"
-          id="tdate"
+        ></v-text-field>
+        <v-text-field
+          v-model="tournament.dateTime"
           for="dateTime"
+          type="datetime-local"
           class="mt-2"
           label="Date and Time"
-        ></c-input>
-        <c-input
-          :model="tournament"
-          id="ttype"
+        ></v-text-field>
+        <v-select
+          v-model="tournament.type"
           for="type"
+          item-title="displayName"
+          :items="Types.values"
           class="mt-2"
           label="Type"
-        ></c-input>
+        ></v-select>
         <v-btn @click="createTournament()">Create</v-btn>
       </v-form>
       <div class="mt-2 mx-2" style="height: 20px">
@@ -47,6 +46,7 @@
 
 <script setup lang="ts">
 import { TournamentViewModel } from "@/viewmodels.g";
+import { Type as Types } from "@/metadata.g";
 
 const tournament = new TournamentViewModel();
 const errors = ref({
@@ -54,20 +54,19 @@ const errors = ref({
   dateTime: "",
   type: "",
 });
-var addedSucessfully = false;
+const addedSucessfully = ref(false);
 
-function createTournament() {
+async function createTournament() {
   errors.value.name = "";
   errors.value.dateTime = "";
   errors.value.type = "";
-
   if (!tournament.name) {
     errors.value.name = "Name is required";
   }
-  if (tournament.dateTime == null) {
+  if (!tournament.dateTime) {
     errors.value.dateTime = "Date and Time are required";
   }
-  if (tournament.type == null) {
+  if (tournament.type === null) {
     errors.value.type = "Type is required";
   }
   if (
@@ -75,10 +74,21 @@ function createTournament() {
     errors.value.dateTime === "" &&
     errors.value.type === ""
   ) {
-    tournament.$save();
-    addedSucessfully = true;
+    await tournament.$save();
+    tournament.name = "";
+    tournament.dateTime = null;
+    tournament.type = null;
+    addedSucessfully.value = true;
+    setTimeout(() => {
+      addedSucessfully.value = false;
+    }, 5000);
   } else {
-    addedSucessfully = false;
+    addedSucessfully.value = false;
+    setTimeout(() => {
+      errors.value.name = "";
+      errors.value.dateTime = "";
+      errors.value.type = "";
+    }, 5000);
   }
 }
 </script>
