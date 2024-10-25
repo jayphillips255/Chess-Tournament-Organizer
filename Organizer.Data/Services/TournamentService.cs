@@ -42,7 +42,7 @@ public class TournamentService(AppDbContext db) : ITournamentService
                 }
             }
         }
-        // For rounds 2-End, pair by score. Avoid rematches if possible.
+        // For rounds 2-End, pair by score. Avoid rematches.
         // A player can recieve a full-point-bye only once.
         else
         {
@@ -58,15 +58,15 @@ public class TournamentService(AppDbContext db) : ITournamentService
                     var player1 = group.ElementAt(i);
                     if (unpairedPlayers.Contains(player1))
                     {
-                        var opponent = unpairedPlayers
+                        var player2 = unpairedPlayers
                             .Where(p => p != player1 && !player1.PastOpponents.Contains(p))
                             .FirstOrDefault();
 
-                        if (opponent != null)
+                        if (player2 != null)
                         {
-                            pairs.Add(new PlayerPair { Black = player1, White = opponent });
+                            Assign(player1, player2, pairs);
                             unpairedPlayers.Remove(player1);
-                            unpairedPlayers.Remove(opponent);
+                            unpairedPlayers.Remove(player2);
                         }
                     }
                 }
@@ -74,30 +74,30 @@ public class TournamentService(AppDbContext db) : ITournamentService
             while (unpairedPlayers.Count > 1)
             {
                 var player1 = unpairedPlayers[0];
-                Player? opponent = null;
+                Player? player2 = null;
 
                 foreach (var group in playerScores)
                 {
                     if (group.Any(p => p != player1 && !player1.PastOpponents.Contains(p)))
                     {
-                        opponent = group
+                        player2 = group
                             .Where(p => p != player1 && !player1.PastOpponents.Contains(p))
                             .FirstOrDefault();
-                        if (opponent != null) break;
+                        if (player2 != null) break;
                     }
                 }
-                if (opponent == null)
+                if (player2 == null)
                 {
-                    opponent = unpairedPlayers
+                    player2 = unpairedPlayers
                         .Where(p => p != player1)
                         .OrderBy(p => player1.PastOpponents.IndexOf(p)) // Least recent opponent
                         .FirstOrDefault();
                 }
-                if (opponent != null)
+                if (player2 != null)
                 {
-                    pairs.Add(new PlayerPair { Black = player1, White = opponent });
+                    Assign(player1, player2, pairs);
                     unpairedPlayers.Remove(player1);
-                    unpairedPlayers.Remove(opponent);
+                    unpairedPlayers.Remove(player2);
                 }
             }
             if (unpairedPlayers.Count == 1)
@@ -114,6 +114,17 @@ public class TournamentService(AppDbContext db) : ITournamentService
         return [.. pairs];
     }
 
+    private static void Assign(Player player1, Player player2, List<PlayerPair> pairs)
+    {
+        if (player1.NumGamesAsBlack <= player2.NumGamesAsBlack)
+        {
+            pairs.Add(new PlayerPair { Black = player1, White = player2 });
+        }
+        else
+        {
+            pairs.Add(new PlayerPair { Black = player2, White = player1 });
+        }
+    }
 
     public void UpdatePlayers(Game[] games, string tournamentId)
     {
@@ -129,8 +140,8 @@ public class TournamentService(AppDbContext db) : ITournamentService
             var whitePlayer = game.WhiteId != null
                 ? db.Players.FirstOrDefault(p => p.PlayerId == game.WhiteId)
                 : null;
-
-            // If White is null, Black is unpaired for the round.
+            
+            // If White is null, Black is unpaired for this round
             if (whitePlayer == null && blackPlayer != null)
             {
                 if (blackPlayer.HasHalfPointBye)
@@ -163,8 +174,8 @@ public class TournamentService(AppDbContext db) : ITournamentService
                         whitePlayer.Score += 0.5;
                         break;
                 }
-                blackPlayer.NumGamesAsBlack += 1;
-                whitePlayer.NumGamesAsWhite += 1;
+                blackPlayer.NumGamesAsBlack++;
+                whitePlayer.NumGamesAsWhite++;
                 blackPlayer.PastOpponents.Add(whitePlayer);
                 whitePlayer.PastOpponents.Add(blackPlayer);
 
