@@ -12,7 +12,7 @@ using Organizer.Data;
 namespace Organizer.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241025003534_Init")]
+    [Migration("20241031154846_Init")]
     partial class Init
     {
         /// <inheritdoc />
