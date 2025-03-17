@@ -1,6 +1,9 @@
 # Chess-Tournament-Organizer
 Allows users to create and operate chess tournaments.
 
+# How to run
+Open Organizer.sln in Visual Studio. Click "Kestrel" on the control pannel to launch the website on local host. This should take a few seconds.
+
 ## What I've done on this Project
 Player.cs, Tournament.cs, ITournamentService.cs, TournamentService.cs, Tournaments.vue, CreateNewTournament.vue, ConductTournament.vue, and minor alterations to other files. This project uses the Coalesce framework https://intellitect.github.io/Coalesce/ 
 
